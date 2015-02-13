@@ -1,3 +1,35 @@
+
+ #include <cstdio>
+ #include <cstring>
+ #define MEM(a,b) memset(a,b,sizeof(a))
+ #define REP(i,n) for(int i=1;i<=(n);++i)
+ #define FOR(i,a,b) for(int i=(a);i<=(b);++i)
+ typedef long long ll;
+
+ ll n,k,m;
+ ll dp[1010][110][2],pw[1010],PW[1010];
+
+ ll Solve(ll p,ll r,int f){
+     if(p <= 0) return f;
+     if(~dp[p][r][f]) return dp[p][r][f];
+     if(f) return (9LL * PW[p - 1]) % m;
+     ll res = 0;
+     FOR(i,(p == 1) ? 1 : 0,9){
+         ll nr = (r + (ll)i * pw[n - p]) % k;
+         res = (res + Solve(p - 1,nr,f || (!nr && i))) % m;
+     }
+     return dp[p][r][f] = res;
+ }
+
+ int main(){
+     scanf("%I64d%I64d%I64d",&n,&k,&m);
+     pw[0] = PW[0] = 1;
+     REP(i,n) pw[i] = (pw[i - 1] * 10) % k,PW[i] = (PW[i - 1] * 10) % m;
+     MEM(dp,-1);
+     printf("%I64d\n",Solve(n,0,0));
+     return 0;
+ }
+/*
 #include <iostream>
 #include <cmath>
 #include <cstdio>
@@ -109,5 +141,5 @@ int main()
     cout << solve() << endl;
 
     return 0;
-}
+}*/
 
